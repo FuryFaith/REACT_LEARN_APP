@@ -1,14 +1,15 @@
-import { Button } from '@mui/material';
 import React from 'react'
 import { storage, db } from './firebase';
 import firebase from "firebase/compat/app";
-import { TextField } from "@mui/material";
+import { Button , TextareaAutosize } from "@mui/material";
 import './ImageUpload.css';
 
-function ImageUpload({username}) {
+function ImageUpload({username, closemodal}) {
     const [image, setImage] = React.useState(null);
     const [caption, setCaption] = React.useState();
     const [progress, setProgress] = React.useState(0);
+
+
 
     const handleChange = (e) => {
         if(e.target.files[0]) {
@@ -53,6 +54,7 @@ function ImageUpload({username}) {
                         setProgress(0);
                         setCaption("");
                         setImage(null);
+                        closemodal(false);
                     });
             }
         );
@@ -64,12 +66,11 @@ function ImageUpload({username}) {
             {/* Caption input..... */}
             {/*  File picker */}
             {/*  Post button */}
-            <progress className='imageupload__progress' value={progress} max="100" />
-            <TextField id="outlined-name" label="Enter a caption...."margin="normal" value={caption} onChange={(e) => setCaption(e.target.value)}
-                />
-
-            <input type="file" onChange={handleChange} />
-            <Button onClick={handleUpload}>Upload</Button>
+                    <progress className='imageupload__progress' value={progress} max="100" />
+                    <TextareaAutosize id="outlined-name" label="Enter a caption...."margin="normal" value={caption} onChange={(e) => setCaption(e.target.value)}
+                        />
+                    <input type="file" onChange={handleChange} />
+                    <Button onClick={handleUpload}>Upload</Button>
 
         </div>
     )

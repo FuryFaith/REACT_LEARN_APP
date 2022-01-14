@@ -1,11 +1,8 @@
 import React, { useEffect , useState}  from "react";
 import './App.css';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Modal from '@mui/material/Modal';
 import Post from './Post';
 import { auth, db } from "./firebase";
-import { TextField, FormControl} from "@mui/material";
+import { TextField ,  FormControl, Box , Button, Modal} from "@mui/material";
 import ImageUpload from "./ImageUpload";
 import InstagramEmbed from "react-instagram-embed";
 
@@ -24,6 +21,7 @@ function App() {
   const [email, setEmail]  = useState();
   const [password, setPassword] =  useState();
   const [user, setUser] = useState(null);
+  const [openImageUpload, setOpenImageUpload] = useState(false);
 
 //this is to take user input and retain ones that are unique , during that session
   useEffect(() => {
@@ -232,11 +230,44 @@ const signIn = (event) =>{
           </div>
 
         </div>
-          {user?.displayName ? (
+
+          {/* {user?.displayName ? (
               <ImageUpload username={user.displayName}/>
               ): (
                 <h3 id="imageload__text">Sorry you need to login to upload</h3>
-              )}
+              )} */}
+
+              {/* Test code here */}
+              <footer className="footer">
+              {user?.displayName ? (
+
+                  <div>
+                    <Modal  
+                      open={openImageUpload}
+                      onClose={() => setOpenImageUpload(false)}
+                      aria-labelledby="modal-modal-title"
+                      aria-describedby="modal-modal-description"
+                    >
+                    <ImageUpload 
+                    username={user.displayName}
+                    closemodal={setOpenImageUpload} />
+                    </Modal>
+                    
+
+                    
+                      <div className="footer__middle">
+                        <img onClick={() => setOpenImageUpload(true)} className="app__add-postImg" src="https://www.shareicon.net/data/128x128/2017/06/22/887600_add_512x512.png" alt='plus icon to add posts'/>
+                      </div>
+
+                    </div>
+
+                  
+                  ): (
+                    <h3>Sorry you need to login to upload</h3>
+                  )}  
+
+                </footer>
+              {/* Test code here */}
     </div>
   );
 }
