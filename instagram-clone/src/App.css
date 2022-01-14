@@ -7,7 +7,7 @@
 
 .app__header{
   background-color: white;
-  padding: 20px;
+  padding: 15px;
   border-bottom: 1px solid lightgray;
   object-fit: contain;
   display: flex;
@@ -18,9 +18,11 @@
 }
 
 .app__loginContainer{
+  margin-left: 10px;
+  display: flex;
+  justify-content: space-between;
   background-color: #FAFAFA;
-  border: 1px solid lightgray;
-  padding: 5px;
+  
 }
 
 
@@ -43,4 +45,8 @@
 
 .app__postsRight {
   margin-left: 20px;
+}
+
+#signHeader__toggle{
+  margin-left: 10px;
 }

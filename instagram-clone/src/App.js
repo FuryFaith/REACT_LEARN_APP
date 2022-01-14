@@ -129,14 +129,15 @@ const signIn = (event) =>{
                 />
 
               <TextField
-                  id="margin"
+                  id="outlined-password-input"
                   label="Password"
+                  type="password"
                   margin="normal"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
 
-              <Button type="submit" variant="outlined" margin="normal" onClick={signUp}>Sign Up</Button>
+              <Button className="signToggles" type="submit" variant="outlined" margin="normal" onClick={signUp}>Sign Up</Button>
             </FormControl>
         </Box>
       </Modal>
@@ -159,6 +160,7 @@ const signIn = (event) =>{
               
               <TextField
                   id="outlined-name"
+                  type="email"
                   label="Email"
                   margin="normal"
                   value={email}
@@ -166,14 +168,15 @@ const signIn = (event) =>{
                 />
 
               <TextField
-                  id="margin"
+                  id="outlined-password-input"
                   label="Password"
+                  type="password"
                   margin="normal"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
 
-              <Button type="submit" variant="outlined" margin="normal" onClick={signIn}>Sign In</Button>
+              <Button className="signToggles"  type="submit" variant="outlined" margin="normal" onClick={signIn}>Sign In</Button>
             </FormControl>
         </Box>
       </Modal>
@@ -192,12 +195,12 @@ const signIn = (event) =>{
           {/* //logout sing up functinality */}
           { user ? (
             <div className="app__loginContainer">
-            <Button onClick={() => auth.signOut()}>Logout</Button>
+            <Button variant="outlined" margin="normal" onClick={() => auth.signOut()}>Logout</Button>
             </div>
                 ):(
                 <div className="app__loginContainer">
-                <Button id="" onClick={() => setOpenSignIn(true)}>Sign In </Button>
-                <Button onClick={handleOpen}>Sign Up</Button>
+                <Button id="signHeader__toggle"variant="outlined" margin="normal" onClick={() => setOpenSignIn(true)}>Sign In </Button>
+                <Button variant="outlined" margin="normal" onClick={handleOpen}>Sign Up</Button>
                 </div>
               )
           }
