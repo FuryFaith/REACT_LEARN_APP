@@ -1,4 +1,5 @@
 .imageupload{
+    max-width: 500px;
     display: flex;
     flex-direction:  column;
     width: 60%;
@@ -11,5 +12,6 @@
 }
 
 .imageupload__progress{
+    max-width: 500px;
     width: 100%;
 }

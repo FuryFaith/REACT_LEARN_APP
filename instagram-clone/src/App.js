@@ -191,11 +191,12 @@ const signIn = (event) =>{
 
           {/* //logout sing up functinality */}
           { user ? (
-
+            <div className="app__loginContainer">
             <Button onClick={() => auth.signOut()}>Logout</Button>
+            </div>
                 ):(
                 <div className="app__loginContainer">
-                <Button onClick={() => setOpenSignIn(true)}>Sign In </Button>
+                <Button id="" onClick={() => setOpenSignIn(true)}>Sign In </Button>
                 <Button onClick={handleOpen}>Sign Up</Button>
                 </div>
               )
@@ -213,17 +214,17 @@ const signIn = (event) =>{
           </div>
 
           <div className="app__postsRight">
-            <InstagramEmbed
-                url="https://www.instagram.com/p/CDjXLTalHJv/"
-                maxWidth={320}
-                hideCaption={false}
-                containerTagName="div"
-                protocol=""
-                injectScript
-                onLoading={() => {}}
-                onSuccess={() => {}}
-                onAfterRender={() => {}}
-                onFailure={() => {}}
+          <InstagramEmbed
+              url='https://instagr.am/p/Zw9o4/'
+              maxWidth={500}
+              hideCaption={true}
+              containerTagName='div'
+              protocol=''
+              injectScript
+              onLoading={() => {}}
+              onSuccess={() => {}}
+              onAfterRender={() => {}}
+              onFailure={() => {}}
             />
           </div>
 
@@ -231,7 +232,7 @@ const signIn = (event) =>{
           {user?.displayName ? (
               <ImageUpload username={user.displayName}/>
               ): (
-                <h3>Sorry you need to login to upload</h3>
+                <h3 id="imageload__text">Sorry you need to login to upload</h3>
               )}
     </div>
   );

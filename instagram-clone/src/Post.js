@@ -45,7 +45,7 @@ const postComment = (e) => {
             {/* Username avatar */}
         <Avatar
                 className="post__avatar"
-                alt='FuryFaithblog'
+                alt={username}
                 src='/static/images/avatar/1.jpg'
             /> 
             <h3>{username}</h3>

@@ -16,6 +16,14 @@
 .app__headerImage{
   object-fit: contain;
 }
+
+.app__loginContainer{
+  background-color: #FAFAFA;
+  border: 1px solid lightgray;
+  padding: 5px;
+}
+
+
 .app__signup{
   display: flex;
   flex-direction: column;
@@ -24,6 +32,11 @@
 
 .app__posts{
   padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+#imageload__text{
   display: flex;
   justify-content: center;
 }
