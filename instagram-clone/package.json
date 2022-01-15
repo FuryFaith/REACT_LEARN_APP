@@ -5,14 +5,17 @@
   "dependencies": {
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
+    "@material-ui/icons": "^4.11.2",
     "@mui/material": "^5.2.8",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
     "firebase": "^9.6.2",
+    "material-ui-popup-state": "^2.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-instagram-embed": "^3.0.0",
+    "react-linkify": "^1.0.0-alpha",
     "react-scripts": "^3.0.1",
     "web-vitals": "^2.1.3"
   },

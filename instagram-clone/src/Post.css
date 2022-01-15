@@ -73,3 +73,16 @@
     border-top: 1px solid lightgray;
     padding: 20px;
 }
+
+.delete__Post, .delete__CommentButton{
+    position: relative;
+    top: 0px;
+    right: 0px;
+    float: right;
+    cursor: pointer;
+    padding-right: 20px;
+    font-size: 12px;
+    /* color: red; */
+    text-align: right;
+    flex: 0 auto;
+}
