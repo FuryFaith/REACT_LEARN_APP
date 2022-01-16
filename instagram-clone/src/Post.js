@@ -105,7 +105,7 @@ function Post({ postId, user ,username, caption, imageUrl }) {
                 alt={username}
                 src='/static/images/avatar/1.jpg'
             /> 
-            <h3>{username}</h3>
+            <h3 className="post__username">{username}</h3>
 
             {
                     ( user && username === auth.currentUser.displayName)
@@ -127,25 +127,35 @@ function Post({ postId, user ,username, caption, imageUrl }) {
         <h4 className='post__text' ><strong>{username} </strong>{caption}</h4>
 
         <div className="post__comments">
-        <div className="comment_container">
+        
                 {comments.map((comment) => (
-                <p>
-                    {/* <strong>{comment.username}</strong>
-                    &nbsp;
-                    {comment.text} */}
-                    <Linkify componentDecorator={componentDecorator}>
-                        <strong onClick={comment.username}>
-                                {comment.username}: 
-                        </strong> {comment.text}
-                    </Linkify>
-                </p>
-                ))}
+                    <div className="comment_container">
+                        <p className="post__comment breakfix">
+                            <Linkify componentDecorator={componentDecorator}>
+                                <strong onClick={comment.username}>
+                                        {comment.username}: 
+                                </strong> {comment.text}
+                            </Linkify>
+                        </p>
+                        <div className="delete__CommentButton" >
+                            {
+                                ( user && comment.username === auth.currentUser.displayName)
+                                &&
+                                <div className="comment__morevert">
+                                    
+                                    {/* This is where the 3 dots menu appear to delete comments */}
+                                    <MenuPopupState 
+                                        datatopass={comment.timestamp}
+                                        functiontopass={deleteComment}
+                                        labeltopass="Delete this comment"
+                                    />
+                                </div>
+                            } 
+                        </div>
+                        </div>                  
+))}
+</div>                
                        
-                
-                </div>
-        </div>
-
-
         {user && (
         <form className="post__commentBox">
             <input

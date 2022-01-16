@@ -23,6 +23,7 @@
 
 .post__header{
     display: flex;
+    justify-content: space-between;
     align-items: center;
     padding: 20px;
 }
@@ -31,7 +32,14 @@
     margin-right: 10px;
     display: flex;
     float: left;
+    flex: 0 auto;
 }
+
+.post__username  {
+    cursor: pointer;
+    flex: 1
+}
+
 
 .post__commentBox{
     display: flex;
@@ -54,7 +62,7 @@
     cursor: pointer;
 }
 
-.post__input{
+input,.post__input{
     flex: 1;
     border: none;
     padding: 10px;
@@ -74,7 +82,11 @@
     padding: 20px;
 }
 
-.delete__Post, .delete__CommentButton{
+.comment_container{
+    display: flex;
+}
+
+.delete__Post{
     position: relative;
     top: 0px;
     right: 0px;
@@ -85,4 +97,27 @@
     /* color: red; */
     text-align: right;
     flex: 0 auto;
+}
+
+.delete__CommentButton{
+    position: relative;
+    top: 0px;
+    right: 0px;
+    float: right;
+    cursor: pointer;
+    padding-right: 20px;
+    font-size: 12px;
+    /* color: red; */
+    text-align: right;
+    flex: 0 auto;
+}
+
+.comment__morevert{
+    flex: 0;
+    cursor: pointer;
+}
+
+.delete__CommentButton{
+    /* display: none; */
+    font-size: 10px;
 }
