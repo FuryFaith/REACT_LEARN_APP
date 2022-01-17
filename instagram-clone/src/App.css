@@ -6,6 +6,13 @@
   margin-bottom: 120px;
 }
 
+.app__posts{
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+
 .app__header{
   background-color: white;
   padding: 15px;
@@ -23,10 +30,8 @@
 }
 
 .app__loginContainer{
-  margin-left: 10px;
   display: flex;
-  justify-content: space-between;
-  background-color: #FAFAFA;
+  float: right;
   
 }
 
@@ -37,21 +42,6 @@
   object-fit: contain;
 }
 
-.app__posts{
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-}
-
-.app__postsRight {
-  margin-left: 20px;
-}
-
-.floating {
-  position: absolute;
-  position: -webkit-sticky;
-  position: sticky;
-}
 
 #signHeader__toggle{
   margin-left: 10px;
@@ -82,7 +72,13 @@ footer h3{
   display: flex;
 }
 
-.app__add-postImg,.app__home{
+.app__add-postImg{
+  
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.app__home{
   
   cursor: pointer;
   background-color: transparent;
@@ -106,8 +102,7 @@ footer h3{
 .footer__middle Button{
   flex: 1;
   max-width: 20 px;
-  display: flex;
-  justify-content: center;
+
 }
 
 .app__add-postImg {
@@ -120,7 +115,7 @@ footer h3{
 }
 
 .footer__avatar {
-  color: #008000;
+  color: pink;
   margin-top: 10px;
   margin-right: 20px;
   max-height: 30px;
@@ -130,7 +125,7 @@ footer h3{
 
 .post__thumbs {
   display: grid;
-  grid-gap: 2px;
+  grid-gap: 5px;
   grid-template-columns: auto auto auto;
 }
 
@@ -139,8 +134,4 @@ footer h3{
     display: none;
   }
 
-  .app__posts {
-    /* padding-left: 0px;
-    padding-right: 0px; */
-  }
 }

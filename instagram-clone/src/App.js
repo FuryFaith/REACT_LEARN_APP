@@ -6,7 +6,7 @@ import { auth, db } from "./firebase";
 import { TextField ,  FormControl, Box , Button, Modal, Avatar} from "@mui/material";
 import ImageUpload from "./ImageUpload";
 import LazyLoad from "react-lazyload";
-import InstagramEmbed from "react-instagram-embed";
+
 
 function backToTop(){
   document.body.scrollTop = 0; // For Safari
@@ -352,21 +352,6 @@ function home() {
 
           </div>
 
-          <div className="app__postsRight no-mobile">
-          <InstagramEmbed
-              className="floating"
-              url='https://www.instagram.com/p/B_MLdgPjg8N/'
-              maxWidth={500}
-              hideCaption={true}
-              containerTagName='div'
-              protocol=''
-              injectScript
-              onLoading={() => {}}
-              onSuccess={() => {}}
-              onAfterRender={() => {}}
-              onFailure={() => {}}
-            />
-          </div>
 
         </div>
 
@@ -404,7 +389,7 @@ function home() {
                             onClick={()=> {setViewMine(true); backToTop();}}
                             className="footer__avatar"
                             alt={username}
-                            src="https://toogreen.ca/instagreen/static/images/avatar/1.jpg"
+                            src='/static/images/avatar/1.jpg'
                         />  
                     </div>
                     </div>
