@@ -1,19 +1,31 @@
 import React, { useEffect , useState}  from "react";
 import './App.css';
 import Post from './Post';
+import PostThumb from "./PostThumb";
 import { auth, db } from "./firebase";
-import { TextField ,  FormControl, Box , Button, Modal} from "@mui/material";
+import { TextField ,  FormControl, Box , Button, Modal, Avatar} from "@mui/material";
 import ImageUpload from "./ImageUpload";
+import LazyLoad from "react-lazyload";
 import InstagramEmbed from "react-instagram-embed";
 
+function backToTop(){
+  document.body.scrollTop = 0; // For Safari
+  document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+}
 
+const Spinner = () => (
+  <div className="post loading">
+    <img alt="Loading..." src="https://i.gifer.com/ZZ5H.gif" width="20" />
+    <h5>Loading...</h5>
+  </div>
+);
 
 
 function App() {
   // variables input that are gonna be used in to recieve and pull data
 
   const[posts, setPosts] = useState([]);
-  const[ open, setOpen ] = useState(false);
+  const[open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [openSignIn, setOpenSignIn] = useState();
@@ -22,6 +34,12 @@ function App() {
   const [password, setPassword] =  useState();
   const [user, setUser] = useState(null);
   const [openImageUpload, setOpenImageUpload] = useState(false);
+
+
+  const [viewmine, setViewMine] = useState(false);
+  const [viewwhichuser, setViewWhichUser] = useState('');
+  const [viewsinglepost, setViewSinglePost] = useState(false);
+  const [singlepostid, setSinglePostId] = useState('');
 
 //this is to take user input and retain ones that are unique , during that session
   useEffect(() => {
@@ -56,7 +74,7 @@ function App() {
 
 
 // this is to pull data that is in db as snapshots and refresh only the ones that are recently added
-useEffect(() => { db.collection('posts').onSnapshot(snapshot => {
+useEffect(() => { db.collection('posts').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
   setPosts(snapshot.docs.map(doc => ({
     id: doc.id,
     post: doc.data()})
@@ -90,6 +108,14 @@ const signIn = (event) =>{
   .catch((error) => alert.apply(error.message))
 
   setOpenSignIn(false);
+}
+
+
+function home() {
+  setViewMine(false); 
+  setViewWhichUser(''); 
+  setViewSinglePost(false); 
+  backToTop();    
 }
 
   return (
@@ -182,41 +208,154 @@ const signIn = (event) =>{
 
 
       {/*  Header part ---------------------------- */}
-        <div className="app__header">
+
+      <header className="app__header">
 
           <img
             className="app__headerImage"
             src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png"
             alt="app_headerImage missing!"
           />
-
+          <div className="app__loginContainer">
           {/* //logout sing up functinality */}
           { user ? (
-            <div className="app__loginContainer">
+            <div className="loginLeft">
             <Button variant="outlined" margin="normal" onClick={() => auth.signOut()}>Logout</Button>
             </div>
                 ):(
-                <div className="app__loginContainer">
+                <div className="loginRight">
                 <Button id="signHeader__toggle"variant="outlined" margin="normal" onClick={() => setOpenSignIn(true)}>Sign In </Button>
                 <Button variant="outlined" margin="normal" onClick={handleOpen}>Sign Up</Button>
                 </div>
               )
           }
-        </div>
+          </div>
+        </header>
 
         <div className="app__posts">
           <div className="app_postsLeft">
           {/* //below code maps the posts present in database and pulls them out, and refreshs only the lastest added to db */}
           {
-            posts.map(({id, post}) => (
-              <Post key ={id} postId={id} user={user} username={post.username} caption={post.caption} imageUrl={post.imageUrl}/>
-            ))
-          }
+            // If "View my own posts button was clicked AND user is logged in"
+            (viewmine && user)  ? (
+              
+              <div className="post__thumbs">
+              
+             {
+
+              posts.filter(({id, post}) => post.username === auth.currentUser.displayName).map(({id, post}) => (
+                
+                // added te below div so that if anyone clicks on this it will set a variable to enable view on a single post
+                
+                <LazyLoad 
+                  key={id}
+                  height={100}
+                  offset={[-100, 100]}
+                  placeholder={<Spinner />}
+                  >
+                    <div onClick={() => {setViewSinglePost(true); setSinglePostId(id); setViewMine(false); setViewWhichUser(null); backToTop(); }}>
+                      <PostThumb 
+                          key={id}
+                          postId={id}
+                          user={user}
+                          username={post.username}
+                          caption={post.caption}
+                          imageUrl={post.imageUrl}
+                      />
+                    </div>
+                  </LazyLoad>
+
+
+               ))}
+              </div>
+
+
+              ) : (viewwhichuser)  ? ( // If we want to see other people's list of posts
+                              
+                  <div className="post__thumbs">
+                  
+                {
+
+                  posts.filter(({id, post}) => post.username === viewwhichuser).map(({id, post}) => (
+                    
+                    <LazyLoad 
+                    key={id}
+                    height={100}
+                    offset={[-100, 100]}
+                    placeholder={<Spinner />}
+                    >
+                      <div onClick={() => {setViewSinglePost(true); setSinglePostId(id); setViewMine(false); setViewWhichUser(null); backToTop(); }}>
+                        <PostThumb 
+                            key={id}
+                            postId={id}
+                            user={user}
+                            username={post.username}
+                            caption={post.caption}
+                            imageUrl={post.imageUrl}
+                        />
+                      </div>
+                    </LazyLoad> 
+                    // added te below div so that if anyone clicks on this it will set a variable to enable view on a single post
+
+
+                  ))}
+                  </div>
+                          
+
+            ) : viewsinglepost ? ( 
+
+              // If a single post was selected
+        
+              posts.filter(({id, post}) => id === singlepostid).map(({id, post}) => (
+                <Post 
+                    key={id}
+                    postId={id}
+                    user={user}
+                    username={post.username}
+                    caption={post.caption}
+                    imageUrl={post.imageUrl}
+                    imagename={post.imagename}
+                    viewwhichuser={setViewWhichUser}
+                    viewsinglepost={setViewSinglePost}
+                />                             
+              ))
+                  
+            ) : (
+
+              // Else if no posts were selected at all, simply default to display all posts as usual
+            
+              posts.map(({id, post}) => (
+
+                <LazyLoad 
+                  key={id}
+                  height={100}
+                  offset={[-100, 100]}
+                  placeholder={<Spinner />}
+                  >
+                    <Post 
+                        key={id}
+                        postId={id}
+                        user={user}
+                        username={post.username}
+                        caption={post.caption}
+                        imageUrl={post.imageUrl}
+                        imagename={post.imagename}
+                        viewwhichuser={setViewWhichUser}
+                        viewsinglepost={setViewSinglePost}
+                    />  
+                  </LazyLoad>
+
+              ))
+
+            )
+            }
+
           </div>
 
-          <div className="app__postsRight">
+          <div className="app__postsRight no-mobile">
           <InstagramEmbed
-              url='https://instagr.am/p/Zw9o4/'
+              className="floating"
+              url='https://www.instagram.com/p/B_MLdgPjg8N/'
               maxWidth={500}
               hideCaption={true}
               containerTagName='div'
@@ -231,15 +370,10 @@ const signIn = (event) =>{
 
         </div>
 
-          {/* {user?.displayName ? (
-              <ImageUpload username={user.displayName}/>
-              ): (
-                <h3 id="imageload__text">Sorry you need to login to upload</h3>
-              )} */}
 
-              {/* Test code here */}
               <footer className="footer">
-              {user?.displayName ? (
+
+              {user ? (
 
                   <div>
                     <Modal  
@@ -250,24 +384,46 @@ const signIn = (event) =>{
                     >
                     <ImageUpload 
                     username={user.displayName}
-                    closemodal={setOpenImageUpload} />
+                    closemodal={setOpenImageUpload} 
+                    viewwhichuser={setViewWhichUser}
+                    viewsinglepost={setViewSinglePost}
+                    />                    
                     </Modal>
                     
-
+                    <div className="footer__icons">
+                      <div className="footer__left">
+                        <img onClick={home} className="app__home" src="https://cdn1.iconfinder.com/data/icons/instagram-ui-colored/48/JD-05-512.png" alt='home icon to go back up'/>         
+                      </div>
                     
                       <div className="footer__middle">
                         <img onClick={() => setOpenImageUpload(true)} className="app__add-postImg" src="https://www.shareicon.net/data/128x128/2017/06/22/887600_add_512x512.png" alt='plus icon to add posts'/>
                       </div>
 
+                      <div className="footer__right">
+                      <Avatar 
+                            onClick={()=> {setViewMine(true); backToTop();}}
+                            className="footer__avatar"
+                            alt={username}
+                            src="https://toogreen.ca/instagreen/static/images/avatar/1.jpg"
+                        />  
+                    </div>
+                    </div>
                     </div>
 
                   
                   ): (
-                    <h3>Sorry you need to login to upload</h3>
+
+                    <div className="footer__icons">
+                    <div className="footer__left">
+                      <img onClick={home} className="app__home" src="https://cdn1.iconfinder.com/data/icons/instagram-ui-colored/48/JD-05-512.png" alt='home icon to go back up'/>         
+                    </div>
+                    <div className="footer__middle">
+                        <h3> Sorry have to login to Upload!</h3>
+                    </div>                   
+                </div>
                   )}  
 
                 </footer>
-              {/* Test code here */}
     </div>
   );
 }

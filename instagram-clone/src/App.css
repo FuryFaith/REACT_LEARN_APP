@@ -3,6 +3,7 @@
 }
 .App{
   background-color: #FAFAFA;
+  margin-bottom: 120px;
 }
 
 .app__header{
@@ -12,9 +13,13 @@
   object-fit: contain;
   display: flex;
   justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 .app__headerImage{
   object-fit: contain;
+  flex: 0;
 }
 
 .app__loginContainer{
@@ -42,6 +47,12 @@
   margin-left: 20px;
 }
 
+.floating {
+  position: absolute;
+  position: -webkit-sticky;
+  position: sticky;
+}
+
 #signHeader__toggle{
   margin-left: 10px;
 }
@@ -67,10 +78,25 @@ footer h3{
   margin-top: 20px;
 }
 
-.app__add-postImg{
+.footer__icons {
+  display: flex;
+}
+
+.app__add-postImg,.app__home{
   
   cursor: pointer;
   background-color: transparent;
+}
+
+.footer__left {
+  flex: 0;
+}
+
+.app__home {
+  height: 30px;
+  padding-top: 10px;
+  padding-left: 20px;
+  float: left;
 }
 
 .footer__middle{
@@ -82,4 +108,39 @@ footer h3{
   max-width: 20 px;
   display: flex;
   justify-content: center;
+}
+
+.app__add-postImg {
+  height: 30px;
+  padding-top: 10px;
+}
+
+.footer__right {
+  flex: 0;
+}
+
+.footer__avatar {
+  color: #008000;
+  margin-top: 10px;
+  margin-right: 20px;
+  max-height: 30px;
+  max-width: 30px;
+  cursor: pointer;
+}
+
+.post__thumbs {
+  display: grid;
+  grid-gap: 2px;
+  grid-template-columns: auto auto auto;
+}
+
+@media (max-width: 768px) {
+  .no-mobile {
+    display: none;
+  }
+
+  .app__posts {
+    /* padding-left: 0px;
+    padding-right: 0px; */
+  }
 }

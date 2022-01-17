@@ -7,7 +7,7 @@ import MenuPopupState from "./components/MenuPopupState";
 import Linkify from 'react-linkify';
 
 
-function Post({ postId, user ,username, caption, imageUrl }) {
+function Post({ postId, user ,username, caption, imageUrl, imagename, viewwhichuser }) {
     const [comments, setComments] = useState([]);
     const [comment, setComment] = useState("");
 
@@ -24,7 +24,7 @@ function Post({ postId, user ,username, caption, imageUrl }) {
             .collection("posts")
             .doc(postId)
             .collection("comments")
-            .orderBy("timestamp","desc")
+            .orderBy("timestamp","asc")
             .onSnapshot((snapshot) => {
                 setComments(snapshot.docs.map((doc) => doc.data()));
             });
@@ -43,7 +43,7 @@ function Post({ postId, user ,username, caption, imageUrl }) {
         username: user.displayName,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
-        setComment("");
+        setComment('');
     };
 
     function deletePost(postId) {
@@ -61,7 +61,7 @@ function Post({ postId, user ,username, caption, imageUrl }) {
         var storageRef = storage.ref();
 
         // Create a reference to the file to delete
-        var desertRef = storageRef.child('images/'+username);
+        var desertRef = storageRef.child('images/'+imagename);
 
         // Delete the file
         desertRef.delete().then(function() {
@@ -93,19 +93,30 @@ function Post({ postId, user ,username, caption, imageUrl }) {
     
     }
 
+    function backtotop(){
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
 
+    // Function to view others' posts
+    function viewtheirstuff(userselected) { 
+        viewwhichuser(userselected);
+        backtotop();
+    }
 
 
     return (
         <div className='post'> 
         <div className='post__header'>
-            {/* Username avatar */}
         <Avatar
                 className="post__avatar"
                 alt={username}
                 src='/static/images/avatar/1.jpg'
+                onClick={viewtheirstuff.bind(this, username)}
             /> 
-            <h3 className="post__username">{username}</h3>
+            <div className="post__username" onClick={viewtheirstuff.bind(this, username)}>
+            <h3>{username}</h3>
+            </div>
 
             {
                     ( user && username === auth.currentUser.displayName)
@@ -115,7 +126,7 @@ function Post({ postId, user ,username, caption, imageUrl }) {
                         <MenuPopupState 
                             datatopass={postId}
                             functiontopass={deletePost}
-                            labeltopass="Delete this post"
+                            labeltopass="Delete Post"
                         />
                     </div>
 
@@ -123,20 +134,71 @@ function Post({ postId, user ,username, caption, imageUrl }) {
 
 
         </div>
-        <img className='post__image' src={imageUrl} alt="Missing!"/>
-        <h4 className='post__text' ><strong>{username} </strong>{caption}</h4>
+
+        <div className="post__imgcontainer">
+
+{ 
+// Check if the image is a video instead of an image, and if so, use the VIDEO tag instead
+(imageUrl.includes(".mp4")) || (imageUrl.includes(".MP4")) || (imageUrl.includes(".mov")) || (imageUrl.includes(".MOV")) 
+? 
+    (
+    <video width="100%" max-width="500" controls="true" autoplay="false" loop="true" muted="true" playsinline="true">
+        <source src={imageUrl} type='video/mp4'></source>
+        Your browser does not support the video tag.
+    </video>
+    )
+    :
+(imageUrl.includes(".mp3")) || (imageUrl.includes(".MP3")) 
+? 
+    (
+    <audio width="100%" max-width="500" controls="true" autoplay="false" loop="false" muted="false" playsinline="true">
+        <source src={imageUrl} type='audio/mp3'></source>
+        Your browser does not support the video tag.
+    </audio>
+    )
+    : 
+(imageUrl.includes(".pdf")) || (imageUrl.includes(".PDF")) 
+? 
+    (
+    <a href={imageUrl}>
+        <source src={imageUrl} type='document/pdf'></source>
+        Your browser does not support the video tag.
+    </a>
+    )
+    : 
+    (
+    // If it is NOT a video, load it as an image:
+    <img width="100%" max-width="400" max-height="600" className="post__image" src={imageUrl} alt="" />
+    )
+}
+
+</div>            
+
+
+
+<h4 className="post__text breakfix">
+{
+caption && // Only if the caption field is NOT empty, display it along with the user name
+    <Linkify componentDecorator={componentDecorator}>
+        <strong onClick={viewtheirstuff.bind(this, username)}>{username}: </strong>{caption}
+    </Linkify>
+}
+</h4>
 
         <div className="post__comments">
         
                 {comments.map((comment) => (
+
                     <div className="comment_container">
+
                         <p className="post__comment breakfix">
                             <Linkify componentDecorator={componentDecorator}>
-                                <strong onClick={comment.username}>
+                                <strong onClick={viewtheirstuff.bind(this, comment.username)}>
                                         {comment.username}: 
                                 </strong> {comment.text}
                             </Linkify>
                         </p>
+
                         <div className="delete__CommentButton" >
                             {
                                 ( user && comment.username === auth.currentUser.displayName)
@@ -147,7 +209,7 @@ function Post({ postId, user ,username, caption, imageUrl }) {
                                     <MenuPopupState 
                                         datatopass={comment.timestamp}
                                         functiontopass={deleteComment}
-                                        labeltopass="Delete this comment"
+                                        labeltopass="Delete Comment"
                                     />
                                 </div>
                             } 

@@ -4,7 +4,7 @@ import firebase from "firebase/compat/app";
 import { Button , TextareaAutosize } from "@mui/material";
 import './ImageUpload.css';
 
-function ImageUpload({username, closemodal}) {
+function ImageUpload({username, closemodal, viewwhichuser, viewsinglepost}) {
     const [image, setImage] = React.useState(null);
     const [caption, setCaption] = React.useState();
     const [progress, setProgress] = React.useState(0);
@@ -19,7 +19,7 @@ function ImageUpload({username, closemodal}) {
 
     const handleUpload = () => {
         // eslint-disable-next-line
-        const uploadTask = storage.ref(`/images/${image.name}`).put(image)
+        const uploadTask = storage.ref(`/images/${image.name}`).put(image);
 
         uploadTask.on(
             "state_changed",
@@ -48,13 +48,20 @@ function ImageUpload({username, closemodal}) {
                             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                             caption: caption,
                             imageUrl: url,
-                            username: username
+                            username: username,
+                            imagename: image.name
                         });
 
                         setProgress(0);
                         setCaption("");
                         setImage(null);
                         closemodal(false);
+
+                        // Scroll back to top and reset other states so that it goes back to default list
+                        document.body.scrollTop = 0; // For Safari
+                        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+                        viewwhichuser('');
+                        viewsinglepost(false);
                     });
             }
         );
@@ -62,10 +69,7 @@ function ImageUpload({username, closemodal}) {
 
     return (
         <div className='imageupload'>
-            {/*  I want to have .... input field */}
-            {/* Caption input..... */}
-            {/*  File picker */}
-            {/*  Post button */}
+
                     <progress className='imageupload__progress' value={progress} max="100" />
                     <TextareaAutosize id="outlined-name" label="Enter a caption...."margin="normal" value={caption} onChange={(e) => setCaption(e.target.value)}
                         />
